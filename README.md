@@ -1,4 +1,4 @@
-# Python Evaluation Function
+# Festival of Learning Team 1 - Python Evaluation Function
 
 This repository contains the boilerplate code needed to create a containerized evaluation function written in Python.
 
