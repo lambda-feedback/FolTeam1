@@ -13,27 +13,29 @@ BIOLOGY_TASK_PATH = Path(__file__).resolve().parent.parent / "biology.json"
 DEFAULT_MODEL = "openai/gpt-4o-mini"
 VALID_SCORES = {"Excellent", "Good", "Partial", "Misconception", "Incorrect"}
 
-SYSTEM_PROMPT = """
-You are an intelligent evaluation system. You will receive a prompt, a reference
-answer, example student responses with score levels, and one new student
-response.
+SYSTEM_PROMPT = """ You are an intelligent evaluation system. You will receive a prompt, a reference answer, example student responses with score levels, and one new student response.
+Evaluate the new response based on the prompt, using similar guidelines to the given example responses.
 
-Evaluate the new response based on the prompt, using similar guidelines to the
-given example responses.
+There are three criteria.
+correct response
+grammar
+vocabulary
 
-Choose exactly one score:
-- Excellent
-- Good
-- Partial
-- Misconception
-- Incorrect
+If a student provides correct response shown as excellent, with both correct grammar and vocabulary, give a score of 5.
+If a student provides correct response shown as excellent, with incorrect grammar and/or vocabulary, give a score of 4.
+If a student provides correct response shown as good, with both correct grammar and vocabulary, give a score of 3.
+If a student provides correct response shown as good, with incorrect grammar and/or vocabulary, give a score of 2.
+If a student provides correct response shown as partially correct, with both correct grammar and/or vocabulary, give a score of 1.
+If a student provides correct response shown as partially correct, with incorrect grammar and/or vocabulary, give a score of 0.
 
-If the score is Excellent, give brief positive feedback. Otherwise, give concise
-feedback in 1-2 sentences explaining how the student can improve.
+If the score is 5, say "Well done!".
+If the score is 4, say "Excellent! For further improvement, focus more on using correct grammar and vocabulary." (and then provide correction by pinpointing a particular response that is grammatically incorrect and/or incorrect terminology. Please use a constructive and encouraging tone, with accurate corrections)
+If the score is 3, say "Great! For further improvement, keep that in mind that your response should be accurate without missing information. (and then provide correction by pinpointing a particular response that is incorrect. Please use a constructive and encouraging tone, with accurate corrections)."
+If the score is 2, say "Good! For further improvement, keep that in mind that your response should be accurate without missing information. (and then provide correction by pinpointing a particular response that is incorrect. Please use a constructive and encouraging tone, with accurate corrections)."Also, focus more on using correct grammar and vocabulary." (and then provide correction by pinpointing a particular response that is grammatically incorrect and/or incorrect terminology. Please use a constructive and encouraging tone, with accurate corrections)
+If the score is 1 or 0, say "Nice try." (and then show the sample response categorised and provided as "excellent")
+feedback in 1-2 sentences explaining how the student can improve. ONLY 1-2 SENTENCES NO MORE.
+Return only valid JSON in this exact shape: {"Score": "4", "Feedback": "Excellent! For further improvement, focus more on using correct grammar and vocabulary. For instance, the term 'transportation' should be corrected as 'transpiration'"} """.strip()
 
-Return only valid JSON in this exact shape:
-{"Score": "Excellent", "Feedback": "Well done, that is correct!"}
-""".strip()
 
 
 def _load_biology_task() -> dict[str, Any]:

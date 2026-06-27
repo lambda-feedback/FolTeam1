@@ -24,6 +24,7 @@ RUN python -m compileall -q .
 
 # Copy the evaluation function to the app directory
 COPY evaluation_function ./evaluation_function
+COPY biology.json ./biology.json
 
 # Command to start the evaluation function with
 ENV FUNCTION_COMMAND="python"
