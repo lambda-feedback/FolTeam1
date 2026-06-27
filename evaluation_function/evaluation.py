@@ -1,5 +1,7 @@
 import os
 from typing import Any
+from dotenv import load_dotenv
+from openai import OpenAI
 from lf_toolkit.evaluation import Result, Params
 
 load_dotenv()
@@ -32,7 +34,13 @@ def evaluation_function(
     to output the evaluation response.
     """
 
-    result = Result(is_correct=response == answer)
+    # result = Result(is_correct=response == answer)
+
+    client = OpenAI(
+        api_key=os.environ.get("OPENROUTER_API_KEY"),
+        base_url="https://openrouter.ai/api/v1",
+        max_retries=3,
+    )
 
     SYSTEM_PROMPT = "You are a teaching assistant, give helpful feedback to the student."
     teacher_prompt = params.get('teacher_prompt', 'Evaluate the student response and provide helpful feedback.')
