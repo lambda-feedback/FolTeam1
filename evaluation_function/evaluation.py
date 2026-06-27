@@ -34,6 +34,7 @@ def evaluation_function(
     to output the evaluation response.
     """
 
+
     # result = Result(is_correct=response == answer)
 
     client = OpenAI(
