@@ -29,6 +29,12 @@ def evaluation_function(
     to output the evaluation response.
     """
 
-    return Result(
-        is_correct=response == answer
-    )
+    result = Result(is_correct=response == answer)
+
+    if not result.is_correct:
+        result.add_feedback(
+            "general",
+            "Not quite right. Please review your answer and try again.",
+        )
+
+    return result
