@@ -38,6 +38,8 @@ jobs:
 
       - name: Run tests
         if: always()
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: poetry run pytest --junit-xml=./reports/pytest.xml --tb=auto -v
 
       - name: Upload test results
