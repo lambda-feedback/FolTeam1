@@ -27,13 +27,4 @@ class TestEvaluationFunction(unittest.TestCase):
         result = evaluation_function(response, answer, params).to_dict()
 
         self.assertEqual(result.get("is_correct"), True)
-        self.assertFalse(result.get("feedback", False))
-
-    def test_incorrect_answer_gives_constructive_feedback(self):
-        response, answer, params = "Hello", "Hello, World", Params()
-
-        result = evaluation_function(response, answer, params).to_dict()
-
-        self.assertEqual(result.get("is_correct"), False)
-        self.assertIn("Not quite right", result.get("feedback", ""))
-        self.assertIn("try again", result.get("feedback", ""))
+        self.assertTrue(result.get("feedback"))

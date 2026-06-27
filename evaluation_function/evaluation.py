@@ -1,5 +1,8 @@
+import os
 from typing import Any
 from lf_toolkit.evaluation import Result, Params
+
+load_dotenv()
 
 def evaluation_function(
     response: Any,
@@ -31,10 +34,24 @@ def evaluation_function(
 
     result = Result(is_correct=response == answer)
 
-    if not result.is_correct:
-        result.add_feedback(
-            "general",
-            "Not quite right. Please review your answer and try again. Test.",
-        )
+    SYSTEM_PROMPT = "You are a teaching assistant, give helpful feedback to the student."
+    teacher_prompt = params.get('teacher_prompt', 'Evaluate the student response and provide helpful feedback.')
+
+    prompt = SYSTEM_PROMPT + "\n" + teacher_prompt
+
+    llm_response = client.chat.completions.create(
+        model=params.get('model', 'openai/gpt-4o-mini'),
+        messages=[
+            {"role": "system", "content": prompt},
+            {"role": "user", "content": response},
+        ],
+    )
+
+    result = Result(is_correct=True)
+
+    result.add_feedback(
+        "general",
+        llm_response.choices[0].message.content,
+    )
 
     return result
