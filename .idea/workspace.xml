@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="e3eeefd5-0821-424f-bd39-2fad9bb33bdf" name="Changes" comment="Changes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/evaluation_function/evaluation.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluation_function/evaluation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/poetry.lock" beforeDir="false" afterPath="$PROJECT_DIR$/poetry.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

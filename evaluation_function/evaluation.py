@@ -12,6 +12,14 @@ load_dotenv()
 BIOLOGY_TASK_PATH = Path(__file__).resolve().parent.parent / "biology.json"
 DEFAULT_MODEL = "openai/gpt-4o-mini"
 VALID_SCORES = {"Excellent", "Good", "Partial", "Misconception", "Incorrect"}
+NUMERIC_SCORE_LABELS = {
+    "5": "Excellent",
+    "4": "Excellent",
+    "3": "Good",
+    "2": "Good",
+    "1": "Partial",
+    "0": "Incorrect",
+}
 
 SYSTEM_PROMPT = """ You are an intelligent evaluation system. You will receive a prompt, a reference answer, example student responses with score levels, and one new student response.
 Evaluate the new response based on the prompt, using similar guidelines to the given example responses.
@@ -79,7 +87,8 @@ def _parse_llm_result(content: str | None) -> tuple[str, str]:
         except json.JSONDecodeError:
             return "Incorrect", content.strip() or "Unable to evaluate the response."
 
-    score = str(data.get("Score") or data.get("score") or "").strip().title()
+    raw_score = str(data.get("Score") or data.get("score") or "").strip()
+    score = NUMERIC_SCORE_LABELS.get(raw_score, raw_score.title())
     feedback = str(data.get("Feedback") or data.get("feedback") or "").strip()
 
     if score not in VALID_SCORES:
@@ -89,6 +98,13 @@ def _parse_llm_result(content: str | None) -> tuple[str, str]:
         feedback = "Unable to evaluate the response."
 
     return score, feedback
+
+
+def _format_feedback(score: str, feedback: str) -> str:
+    if score == "Excellent" and feedback.rstrip(".!").casefold() == "well done":
+        return "Excellent, well done!"
+
+    return f"{score}: {feedback}"
 
 
 def evaluation_function(
@@ -150,7 +166,7 @@ def evaluation_function(
 
     result.add_feedback(
         "general",
-        f"{score}: {feedback}",
+        _format_feedback(score, feedback),
     )
 
     return result
